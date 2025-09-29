@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html lang="en">">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inventory System</title>
+  <style>
+    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#2563eb;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--bg); color:#0f172a}
+    header{background:linear-gradient(90deg,#0ea5e9 0%, #2563eb 100%); color:white; padding:18px 24px}
+    .container{max-width:1100px;margin:20px auto;padding:18px}
+
+    /* Card */
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);padding:18px}
+
+    /* Login */
+    .login-wrap{display:flex;min-height:72vh;align-items:center;justify-content:center}
+    .login-card{width:420px;padding:22px}
+    .logo{font-weight:700;font-size:20px;margin-bottom:6px}
+    label{display:block;font-size:13px;color:var(--muted);margin-top:12px}
+    input[type=text], input[type=password], input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
+    button{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;margin-top:14px}
+
+    /* App */
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .search{width:320px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    table{width:100%;border-collapse:collapse}
+    th, td{padding:8px 10px;text-align:left;border-bottom:1px solid #eef2f7}
+    th{font-size:13px;color:var(--muted)}
+    .actions button{margin-right:8px}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:880px){.grid{grid-template-columns:1fr}}
+
+    /* tiny utilities */
+    .muted{color:var(--muted)}
+    .pill{display:inline-block;background:#f1f5f9;padding:6px 8px;border-radius:999px;font-size:13px}
+    .right{display:flex;gap:8px;align-items:center}
+    .btn-ghost{background:transparent;border:1px solid #e6e9ef;padding:8px;border-radius:8px}
+    .danger{background:#ef4444}
+    .hidden{display:none}
+
+    /* form inside sidebar */\    
+    .form-row{margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <strong>Inventory System</strong>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-wrap card login-card">
+      <div>
+        <div class="logo">Inventory � Admin Login</div>
+        <div class="small muted">Enter credentials to access the inventory dashboard.</div>
+
+        <label>Username</label>
+        <input id="username" type="text" placeholder="admin" value="admin" />
+        <label>Password</label>
+        <input id="password" type="password" placeholder="admin123" value="admin123" />
+        <button id="loginBtn">Sign in</button>
+        <div id="loginMsg" class="small muted" style="margin-top:8px"></div>
+
+        <label>Username</label>
+        <input id="username" type="text" placeholder="user" value="user" />
+        <label>Password</label>
+        <input id="password" type="password" placeholder="user123" value="user123" />
+        <button id="loginBtn">Sign in</button>
+        <div id="loginMsg" class="small muted" style="margin-top:8px"></div>
+
+        <hr style="margin:18px 0"/>
+        <div class="small muted">credentials: <strong>admin / admin123</strong> </div>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app" class="hidden">
+      <div class="topbar">
+        <div>
+          <h2 style="margin:0">Inventory Dashboard</h2>
+          <div class="small muted">Manage products, stock, and export data</div>
+        </div>
+        <div class="right">
+          <input id="globalSearch" class="search" placeholder="Search by name, sku or category" />
+          <button id="exportCsv" class="btn-ghost">Export CSV</button>
+          <button id="logoutBtn" class="btn-ghost">Logout</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <strong>Products</strong>
+            <div class="small muted">Total: <span id="totalCount">0</span></div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th style="width:140px">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTable">
+              <!-- rows inserted here -->
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="card">
+          <strong>Add / Edit Item</strong>
+          <div style="margin-top:10px">
+            <div class="form-row">
+              <label>SKU</label>
+              <input id="itemSku" type="text" placeholder="e.g. SKU-0001" />
+            </div>
+            <div class="form-row">
+              <label>Name</label>
+              <input id="itemName" type="text" placeholder="Product name" />
+            </div>
+            <div class="form-row">
+              <label>Category</label>
+              <input id="itemCategory" type="text" placeholder="Category" />
+            </div>
+            <div class="form-row">
+              <label>Quantity</label>
+              <input id="itemQty" type="number" min="0" value="1" />
+            </div>
+            <div class="form-row">
+              <label>Price (PHP)</label>
+              <input id="itemPrice" type="number" step="0.01" value="0.00" />
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button id="saveItem">Save Item</button>
+              <button id="clearForm" class="btn-ghost">Clear</button>
+            </div>
+            <div id="formMsg" class="small muted" style="margin-top:10px"></div>
+          </div>
+
+          <hr style="margin:14px 0" />
+          <strong>Quick Actions</strong>
+          <div style="margin-top:10px">
+            <button id="seedDemo" class="btn-ghost">Seed Demo Items</button>
+            <button id="clearAll" class="btn-ghost danger" style="color:white">Clear All Data</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer style="margin-top:18px; text-align:center" class="small muted"></footer>
+  </main>
+
+  <script>
+    /* ---------------------- Utilities ---------------------- */
+    const LS_KEY = 'pro_inventory_data_v1';
+    const AUTH_KEY = 'pro_inventory_auth';
+
+    // simple deep clone
+    const clone = (v) => JSON.parse(JSON.stringify(v));
+
+    const formatCurrency = (n) => Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+
+    /* ---------------------- Auth (client-side demo only) ---------------------- */
+    const demoUser = {username:'admin', password:'admin123', name:'Administrator'};
+
+    function isAuthenticated(){
+      try{ const s = localStorage.getItem(AUTH_KEY); return s === '1'; } catch(e){return false}
+    }
+
+    function setAuth(val){ localStorage.setItem(AUTH_KEY, val? '1':'0'); }
+
+    /* ---------------------- Data store ---------------------- */
+    function loadData(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(!raw) return [];
+        return JSON.parse(raw);
+      }catch(e){console.error(e); return []}
+    }
+    function saveData(items){ localStorage.setItem(LS_KEY, JSON.stringify(items)); }
+
+    /* ---------------------- UI & App Logic ---------------------- */
+    const $ = (id)=> document.getElementById(id);
+    const loginScreen = $('loginScreen');
+    const app = $('app');
+    const loginBtn = $('loginBtn');
+    const logoutBtn = $('logoutBtn');
+    const loginMsg = $('loginMsg');
+
+    const inventoryTable = $('inventoryTable');
+    const totalCount = $('totalCount');
+    const globalSearch = $('globalSearch');
+    const exportCsv = $('exportCsv');
+
+    const itemSku = $('itemSku');
+    const itemName = $('itemName');
+    const itemCategory = $('itemCategory');
+    const itemQty = $('itemQty');
+    const itemPrice = $('itemPrice');
+    const saveItem = $('saveItem');
+    const clearForm = $('clearForm');
+    const formMsg = $('formMsg');
+    const seedDemo = $('seedDemo');
+    const clearAll = $('clearAll');
+
+    let items = loadData();
+    let editingId = null; // null or SKU
+
+    function renderTable(filterText=''){
+      inventoryTable.innerHTML='';
+      const f = (filterText||'').trim().toLowerCase();
+      const filtered = items.filter(it => {
+        if(!f) return true;
+        return (it.sku||'').toLowerCase().includes(f) || (it.name||'').toLowerCase().includes(f) || (it.category||'').toLowerCase().includes(f);
+      });
+
+      totalCount.textContent = filtered.length;
+
+      if(filtered.length===0){
+        inventoryTable.innerHTML = '<tr><td colspan="6" class="muted">No items found � add some using the form on the right.</td></tr>';
+        return;
+      }
+
+      for(const it of filtered){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(it.sku)}</td>
+          <td>${escapeHtml(it.name)}</td>
+          <td>${escapeHtml(it.category)}</td>
+          <td>${Number(it.qty)}</td>
+          <td>? ${formatCurrency(it.price)}</td>
+          <td class="actions">
+            <button data-sku="${escapeHtml(it.sku)}" class="btn-edit">Edit</button>
+            <button data-sku="${escapeHtml(it.sku)}" class="btn-del">Delete</button>
+          </td>
+        `;
+        inventoryTable.appendChild(tr);
+      }
+
+      // attach handlers
+      document.querySelectorAll('.btn-edit').forEach(b=> b.addEventListener('click', (e)=>{
+        const sku = e.currentTarget.dataset.sku; startEdit(sku);
+      }));
+      document.querySelectorAll('.btn-del').forEach(b=> b.addEventListener('click', (e)=>{
+        const sku = e.currentTarget.dataset.sku; deleteItem(sku);
+      }));
+    }
+
+    function escapeHtml(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    function startEdit(sku){
+      const it = items.find(x=>x.sku===sku);
+      if(!it) return;
+      editingId = sku;
+      itemSku.value = it.sku; itemName.value = it.name; itemCategory.value = it.category; itemQty.value = it.qty; itemPrice.value = it.price;
+      formMsg.textContent = 'Editing item � click Save to update.';
+    }
+
+    function clearFormFields(){ editingId=null; itemSku.value=''; itemName.value=''; itemCategory.value=''; itemQty.value=1; itemPrice.value=0.00; formMsg.textContent=''; }
+
+    function saveItemHandler(){
+      const sku = (itemSku.value||'').trim();
+      const name = (itemName.value||'').trim();
+      const category = (itemCategory.value||'').trim();
+      const qty = Number(itemQty.value||0);
+      const price = Number(itemPrice.value||0);
+
+      if(!sku || !name){ formMsg.textContent='SKU and Name are required.'; return; }
+      if(qty<0 || price<0){ formMsg.textContent='Quantity and price must be non-negative.'; return; }
+
+      const exists = items.find(x=>x.sku===sku);
+      if(editingId){
+        // editing: allow sku change only if new SKU doesn't conflict
+        if(sku !== editingId && exists){ formMsg.textContent='Another item with this SKU already exists.'; return; }
+        const idx = items.findIndex(x=>x.sku===editingId);
+        items[idx] = { sku, name, category, qty, price };
+        editingId = null;
+        formMsg.textContent = 'Item updated.';
+      } else {
+        if(exists){ formMsg.textContent='Item with this SKU already exists.'; return; }
+        items.push({ sku, name, category, qty, price });
+        formMsg.textContent = 'Item added.';
+      }
+      saveData(items); renderTable(globalSearch.value);
+    }
+
+    function deleteItem(sku){
+      if(!confirm('Delete item '+sku+'?')) return;
+      items = items.filter(x=>x.sku!==sku);
+      saveData(items); renderTable(globalSearch.value);
+    }
+
+    function exportToCsv(){
+      if(items.length===0){ alert('No data to export'); return; }
+      const rows = [ ['SKU','Name','Category','Quantity','Price'] ];
+      for(const it of items) rows.push([it.sku,it.name,it.category,String(it.qty),String(it.price)]);
+      const csv = rows.map(r=> r.map(c=> '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download = 'inventory.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function seedDemoItems(){
+      const demo = [
+        {sku:'SKU-1001', name:'Wireless Mouse', category:'Peripherals', qty:45, price:499.00},
+        {sku:'SKU-1002', name:'Mechanical KB', category:'Peripherals', qty:22, price:2599.50},
+        {sku:'SKU-2001', name:'24" Monitor', category:'Displays', qty:12, price:7999.00},
+        {sku:'SKU-3001', name:'Ethernet Cable 10m', category:'Cables', qty:150, price:199.99},
+      ];
+      items = demo; saveData(items); renderTable();
+    }
+
+    function clearAllData(){ if(!confirm('Clear all inventory data?')) return; items = []; saveData(items); renderTable(); }
+
+    /* ---------------------- Event wiring ---------------------- */
+    loginBtn.addEventListener('click', ()=>{
+      const u = $('username').value.trim(); const p = $('password').value;
+      if(u===demoUser.username && p===demoUser.password){ setAuth(true); showApp(); } else { loginMsg.textContent = 'Invalid credentials.'; }
+    });
+    logoutBtn.addEventListener('click', ()=>{ setAuth(false); showLogin(); });
+
+    saveItem.addEventListener('click', saveItemHandler);
+    clearForm.addEventListener('click', clearFormFields);
+    globalSearch.addEventListener('input', (e)=> renderTable(e.target.value));
+    exportCsv.addEventListener('click', exportToCsv);
+    seedDemo.addEventListener('click', ()=>{ if(confirm('Seed demo items? This will replace current data.')) seedDemoItems(); });
+    clearAll.addEventListener('click', clearAllData);
+
+    // support Enter key on inputs to save
+    [itemSku,itemName,itemCategory,itemQty,itemPrice].forEach(i=> i.addEventListener('keydown', (e)=>{ if(e.key==='Enter') saveItemHandler(); }));
+
+    /* ---------------------- Startup ---------------------- */
+    function showApp(){ loginScreen.classList.add('hidden'); app.classList.remove('hidden'); renderTable(); }
+    function showLogin(){ loginScreen.classList.remove('hidden'); app.classList.add('hidden'); }
+
+    // Auto login if previously authenticated
+    if(isAuthenticated()){ showApp(); } else { showLogin(); }
+
+    // initialize table when app shown
+    renderTable();
+
+    /* ---------------------- Notes ---------------------- */
+    // This is a client-side demo only: authentication and data are stored in localStorage.
+    // For a production-ready system you should implement server-side authentication, password hashing,
+    // secure sessions, and a real database (MySQL/Postgres/NoSQL). Consider building a REST API
+    // and connecting this UI to the backend.
+  </script>
+</body>
+</html>
+
+</head>
+
+<body>
+</body>
+</html>
