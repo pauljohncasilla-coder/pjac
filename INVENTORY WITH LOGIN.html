@@ -1,369 +1,343 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!DOCTYPE html>
-<html lang="en">">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Inventory System</title>
-  <style>
-    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#2563eb;--muted:#6b7280}
-    *{box-sizing:border-box}
-    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--bg); color:#0f172a}
-    header{background:linear-gradient(90deg,#0ea5e9 0%, #2563eb 100%); color:white; padding:18px 24px}
-    .container{max-width:1100px;margin:20px auto;padding:18px}
-
-    /* Card */
-    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);padding:18px}
-
-    /* Login */
-    .login-wrap{display:flex;min-height:72vh;align-items:center;justify-content:center}
-    .login-card{width:420px;padding:22px}
-    .logo{font-weight:700;font-size:20px;margin-bottom:6px}
-    label{display:block;font-size:13px;color:var(--muted);margin-top:12px}
-    input[type=text], input[type=password], input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
-    button{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;margin-top:14px}
-
-    /* App */
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .search{width:320px}
-    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
-    table{width:100%;border-collapse:collapse}
-    th, td{padding:8px 10px;text-align:left;border-bottom:1px solid #eef2f7}
-    th{font-size:13px;color:var(--muted)}
-    .actions button{margin-right:8px}
-    .small{font-size:13px;color:var(--muted)}
-
-    /* responsive */
-    @media (max-width:880px){.grid{grid-template-columns:1fr}}
-
-    /* tiny utilities */
-    .muted{color:var(--muted)}
-    .pill{display:inline-block;background:#f1f5f9;padding:6px 8px;border-radius:999px;font-size:13px}
-    .right{display:flex;gap:8px;align-items:center}
-    .btn-ghost{background:transparent;border:1px solid #e6e9ef;padding:8px;border-radius:8px}
-    .danger{background:#ef4444}
-    .hidden{display:none}
-
-    /* form inside sidebar */\    
-    .form-row{margin-bottom:10px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASS INSTALLATION SERVICES</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<style>
+:root {
+  --accent:#0f172a;
+  --green:#10b981;
+  --white:#ffffff;
+  --danger:#ef4444;
+  --warning:#fbbf24;
+  --text:#111827;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background: linear-gradient(135deg,#0f172a,#10b981,#ffffff);
+  background-size:400% 400%;
+  color: var(--text);
+  animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+header{
+  background: rgba(255,255,255,0.95);
+  padding:16px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 12px 32px rgba(0,0,0,0.15);
+}
+header h1{margin:0;font-size:24px;color:var(--accent);}
+nav button{
+  margin-left:12px;
+  padding:10px 18px;
+  border:none;
+  border-radius:8px;
+  background: var(--accent);
+  color:var(--white);
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+nav button.active, nav button:hover{background:linear-gradient(90deg,#0f172a,#10b981);}
+main{padding:24px;}
+.card{
+  background: rgba(255,255,255,0.95);
+  padding:24px;
+  border-radius:16px;
+  box-shadow:0 12px 32px rgba(0,0,0,0.15);
+  margin-bottom:24px;
+  transition:0.3s;
+}
+.card:hover{transform:translateY(-2px);}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;}
+th{background:#f3f4f6;}
+.btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;margin-right:6px;font-weight:600;transition:0.3s;}
+.btn-primary{background: var(--accent); color:var(--white);}
+.btn-primary:hover{background:linear-gradient(90deg,#0f172a,#10b981);}
+.btn-success{background:var(--green); color:var(--white);}
+.btn-success:hover{background:#059669;}
+.btn-warning{background:var(--warning); color:#000;}
+.btn-warning:hover{background:#f59e0b;}
+.btn-danger{background:var(--danger); color:var(--white);}
+.btn-danger:hover{background:#dc2626;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;}
+.modal .card{width:400px;padding:24px;border-radius:16px;}
+input, select{padding:10px;border-radius:6px;border:1px solid #cbd5e1;width:100%;margin-bottom:12px;}
+.login-container{height:100vh;display:flex;align-items:center;justify-content:center;}
+.login-box{background: rgba(255,255,255,0.95); padding:40px; border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,0.15); width:360px; max-width:90%;}
+.login-box h2{text-align:center;color:var(--accent); margin-bottom:24px;}
+.toast{
+  position:fixed; bottom:20px; right:20px;
+  background: rgba(0,0,0,0.85); color:#fff;
+  padding:16px 24px; border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.2);
+  opacity:0; transform: translateY(50px);
+  transition:0.5s;
+  z-index:1000;
+}
+.toast.show{opacity:1; transform: translateY(0);}
+@media(max-width:600px){main{padding:12px;}header h1{font-size:20px;}nav button{padding:8px 12px;font-size:14px;}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <strong>Inventory System</strong>
+
+<header style="display:none;" id="app-header">
+  <h1>JASS INSTALLATION SERVICES</h1>
+  <nav>
+    <button id="nav-dashboard" class="active">Dashboard</button>
+    <button id="nav-employees">Employees</button>
+    <button id="nav-logs">Logs</button>
+    <button id="btn-logout">Logout</button>
+  </nav>
+</header>
+
+<main id="main-content"></main>
+<div id="modal-root"></div>
+<div id="toast"></div>
+
+<script>
+// ========== Data ==========
+let users = [{username:'admin',password:'admin',role:'admin',name:'Administrator'}];
+let employees = [
+  {id:'E-1001',name:'Paul Santos',department:'IT',position:'Engineer',password:'pass123'},
+  {id:'E-1002',name:'Maria Cruz',department:'HR',position:'Officer',password:'pass456'}
+];
+let logs = [];
+let currentUser=null;
+let currentEmployee=null;
+function formatDate(d){return new Date(d).toLocaleString();}
+
+// ========== Toast ==========
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.innerText=msg; t.className='toast show';
+  setTimeout(()=>{t.className='toast';},3000);
+}
+
+// ========== Landing ==========
+function renderLanding(){
+  document.getElementById('app-header').style.display="none";
+  document.getElementById('main-content').innerHTML=`
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Welcome</h2>
+      <button class="btn btn-primary" onclick="renderAdminLogin()">Admin Login</button>
+      <button class="btn btn-primary" onclick="renderEmployeeLogin()">Employee Login</button>
     </div>
-  </header>
+  </div>`;
+}
 
-  <main class="container">
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="login-wrap card login-card">
-      <div>
-        <div class="logo">Inventory � Admin Login</div>
-        <div class="small muted">Enter credentials to access the inventory dashboard.</div>
-
-        <label>Username</label>
-        <input id="username" type="text" placeholder="admin" value="admin" />
-        <label>Password</label>
-        <input id="password" type="password" placeholder="admin123" value="admin123" />
-        <button id="loginBtn">Sign in</button>
-        <div id="loginMsg" class="small muted" style="margin-top:8px"></div>
-
-        <label>Username</label>
-        <input id="username" type="text" placeholder="user" value="user" />
-        <label>Password</label>
-        <input id="password" type="password" placeholder="user123" value="user123" />
-        <button id="loginBtn">Sign in</button>
-        <div id="loginMsg" class="small muted" style="margin-top:8px"></div>
-
-        <hr style="margin:18px 0"/>
-        <div class="small muted">credentials: <strong>admin / admin123</strong> </div>
+// ========== Admin Login ==========
+function renderAdminLogin(){
+  document.getElementById('main-content').innerHTML=`
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Admin Login</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button class="btn btn-primary" onclick="loginAdmin()">Login</button>
+        <button class="btn" onclick="renderLanding()">Back</button>
       </div>
+    </div>`;
+}
+function loginAdmin(){
+  const u=document.getElementById('login-username').value.trim();
+  const p=document.getElementById('login-password').value.trim();
+  const match=users.find(x=>x.username===u && x.password===p && x.role==='admin');
+  if(match){ currentUser=match; document.getElementById('app-header').style.display="flex"; showView('dashboard'); showToast('Welcome '+match.name);}
+  else showToast('Invalid credentials');
+}
+
+// ========== Employee Login ==========
+function renderEmployeeLogin(){
+  document.getElementById('main-content').innerHTML=`
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Employee Login</h2>
+        <input type="text" id="emp-id-login" placeholder="Employee ID">
+        <input type="password" id="emp-pass-login" placeholder="Password">
+        <button class="btn btn-primary" onclick="loginEmployee()">Login</button>
+        <button class="btn" onclick="renderLanding()">Back</button>
+      </div>
+    </div>`;
+}
+function loginEmployee(){
+  const id=document.getElementById('emp-id-login').value.trim();
+  const pass=document.getElementById('emp-pass-login').value.trim();
+  const emp=employees.find(e=>e.id===id && e.password===pass);
+  if(emp){ currentEmployee=emp; renderEmployeePortal(); showToast('Welcome '+emp.name);}
+  else showToast('Invalid employee credentials');
+}
+
+// ========== Employee Portal ==========
+function renderEmployeePortal(){
+  const emp=currentEmployee;
+  const empLogs=logs.filter(l=>l.empId===emp.id);
+  let rows=''; [...empLogs].reverse().forEach(l=>rows+=`<tr><td>${l.time}</td><td>${l.action}</td></tr>`);
+  document.getElementById('main-content').innerHTML=`
+    <div class="card">
+      <h2>Welcome, ${emp.name}</h2>
+      <p><strong>ID:</strong> ${emp.id}<br><strong>Dept:</strong> ${emp.department}<br><strong>Position:</strong> ${emp.position}</p>
+      <button class="btn btn-success" onclick="employeeAction('Time In')">Time In</button>
+      <button class="btn btn-warning" onclick="employeeAction('Time Out')">Time Out</button>
+      <button class="btn btn-danger" onclick="logoutEmployee()">Logout</button>
     </div>
+    <div class="card">
+      <h3>Your Logs</h3>
+      <button class="btn btn-success" onclick="exportLogs()">Export Logs</button>
+      <table><thead><tr><th>Time</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
 
-    <!-- APP -->
-    <div id="app" class="hidden">
-      <div class="topbar">
-        <div>
-          <h2 style="margin:0">Inventory Dashboard</h2>
-          <div class="small muted">Manage products, stock, and export data</div>
-        </div>
-        <div class="right">
-          <input id="globalSearch" class="search" placeholder="Search by name, sku or category" />
-          <button id="exportCsv" class="btn-ghost">Export CSV</button>
-          <button id="logoutBtn" class="btn-ghost">Logout</button>
-        </div>
+function employeeAction(action){
+  const emp=currentEmployee;
+  const empLogs=logs.filter(l=>l.empId===emp.id);
+  const last=empLogs.slice(-1)[0];
+  if(last && last.action===action){ showToast('Already did '+action+' at '+last.time); return; }
+  logs.push({time:formatDate(new Date()), empId:emp.id, action});
+  showToast(action+' recorded');
+  renderEmployeePortal();
+}
+function logoutEmployee(){ currentEmployee=null; renderLanding(); }
+
+// ========== Admin Views ==========
+function showView(view){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(view!=='logout') document.getElementById('nav-'+view).classList.add('active');
+  if(view==='dashboard') renderDashboard();
+  else if(view==='employees') renderEmployeeTable();
+  else if(view==='logs') renderLogs();
+}
+function renderDashboard(){
+  let deptCounts={}, empCounts={};
+  employees.forEach(e=>{deptCounts[e.department]=0; empCounts[e.name]=0;});
+  logs.forEach(l=>{if(l.action==='Time In'){const e=employees.find(x=>x.id===l.empId); if(e){deptCounts[e.department]++; empCounts[e.name]++;}}});
+  const deptLabels=Object.keys(deptCounts), deptData=Object.values(deptCounts);
+  const empLabels=Object.keys(empCounts), empData=Object.values(empCounts);
+  document.getElementById('main-content').innerHTML=`
+    <div class="card"><h3>Attendance by Department</h3><canvas id="deptChart"></canvas></div>
+    <div class="card"><h3>Attendance by Employee</h3><canvas id="empChart"></canvas></div>`;
+  new Chart(document.getElementById('deptChart'),{type:'bar',data:{labels:deptLabels,datasets:[{label:'Time In',data:deptData,backgroundColor:'rgba(79,70,229,0.8)'}]}, options:{responsive:true,plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('empChart'),{type:'bar',data:{labels:empLabels,datasets:[{label:'Time In',data:empData,backgroundColor:'rgba(16,185,129,0.8)'}]}, options:{responsive:true,plugins:{legend:{display:false}}}});
+}
+
+function renderEmployeeTable(){
+  let rows=''; employees.forEach(e=>{
+    const empLogs=logs.filter(l=>l.empId===e.id);
+    const lastIn=empLogs.filter(l=>l.action==='Time In').slice(-1)[0];
+    const lastOut=empLogs.filter(l=>l.action==='Time Out').slice(-1)[0];
+    rows+=`<tr>
+      <td>${e.id}</td><td>${e.name}</td><td>${e.department}</td><td>${e.position}</td>
+      <td>${lastIn?lastIn.time:'-'}</td><td>${lastOut?lastOut.time:'-'}</td>
+      <td>
+        <button class="btn btn-warning" onclick="openEmployeeModal('edit','${e.id}')">Edit</button>
+        <button class="btn btn-danger" onclick="deleteEmployee('${e.id}')">Delete</button>
+      </td>
+    </tr>`;
+  });
+  document.getElementById('main-content').innerHTML=`
+    <div class="card">
+      <h3>Employees <button class="btn btn-success" onclick="openEmployeeModal('add')">Add Employee</button> <button class="btn btn-success" onclick="exportEmployees()">Export Excel</button></h3>
+      <table><thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Position</th><th>Last In</th><th>Last Out</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+function openEmployeeModal(mode,id=''){
+  let emp={id:'',name:'',department:'',position:'',password:''};
+  if(mode==='edit') emp=employees.find(e=>e.id===id);
+  document.getElementById('modal-root').innerHTML=`
+    <div class="modal">
+      <div class="card">
+        <h3>${mode==='add'?'Add':'Edit'} Employee</h3>
+        ${mode==='edit'?`<input type="text" id="emp-id" placeholder="ID" value="${emp.id}" disabled>`:''}
+        <input type="text" id="emp-name" placeholder="Name" value="${emp.name}">
+        <input type="text" id="emp-dept" placeholder="Department" value="${emp.department}">
+        <input type="text" id="emp-pos" placeholder="Position" value="${emp.position}">
+        <input type="password" id="emp-pass" placeholder="Password" value="${emp.password}">
+        <button class="btn btn-primary" onclick="saveEmployee('${mode}','${id}')">Save</button>
+        <button class="btn btn-danger" onclick="closeModal()">Cancel</button>
       </div>
+    </div>`;
+}
 
-      <div class="grid">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <strong>Products</strong>
-            <div class="small muted">Total: <span id="totalCount">0</span></div>
-          </div>
+function saveEmployee(mode,id){
+  const e={
+    name:document.getElementById('emp-name').value.trim(),
+    department:document.getElementById('emp-dept').value.trim(),
+    position:document.getElementById('emp-pos').value.trim(),
+    password:document.getElementById('emp-pass').value.trim()
+  };
+  if(!e.name){showToast('Name is required'); return;}
 
-          <table>
-            <thead>
-              <tr>
-                <th>SKU</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th style="width:140px">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="inventoryTable">
-              <!-- rows inserted here -->
-            </tbody>
-          </table>
-
-        </div>
-
-        <div class="card">
-          <strong>Add / Edit Item</strong>
-          <div style="margin-top:10px">
-            <div class="form-row">
-              <label>SKU</label>
-              <input id="itemSku" type="text" placeholder="e.g. SKU-0001" />
-            </div>
-            <div class="form-row">
-              <label>Name</label>
-              <input id="itemName" type="text" placeholder="Product name" />
-            </div>
-            <div class="form-row">
-              <label>Category</label>
-              <input id="itemCategory" type="text" placeholder="Category" />
-            </div>
-            <div class="form-row">
-              <label>Quantity</label>
-              <input id="itemQty" type="number" min="0" value="1" />
-            </div>
-            <div class="form-row">
-              <label>Price (PHP)</label>
-              <input id="itemPrice" type="number" step="0.01" value="0.00" />
-            </div>
-            <div style="display:flex;gap:8px;margin-top:10px">
-              <button id="saveItem">Save Item</button>
-              <button id="clearForm" class="btn-ghost">Clear</button>
-            </div>
-            <div id="formMsg" class="small muted" style="margin-top:10px"></div>
-          </div>
-
-          <hr style="margin:14px 0" />
-          <strong>Quick Actions</strong>
-          <div style="margin-top:10px">
-            <button id="seedDemo" class="btn-ghost">Seed Demo Items</button>
-            <button id="clearAll" class="btn-ghost danger" style="color:white">Clear All Data</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <footer style="margin-top:18px; text-align:center" class="small muted"></footer>
-  </main>
-
-  <script>
-    /* ---------------------- Utilities ---------------------- */
-    const LS_KEY = 'pro_inventory_data_v1';
-    const AUTH_KEY = 'pro_inventory_auth';
-
-    // simple deep clone
-    const clone = (v) => JSON.parse(JSON.stringify(v));
-
-    const formatCurrency = (n) => Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-
-    /* ---------------------- Auth (client-side demo only) ---------------------- */
-    const demoUser = {username:'admin', password:'admin123', name:'Administrator'};
-
-    function isAuthenticated(){
-      try{ const s = localStorage.getItem(AUTH_KEY); return s === '1'; } catch(e){return false}
-    }
-
-    function setAuth(val){ localStorage.setItem(AUTH_KEY, val? '1':'0'); }
-
-    /* ---------------------- Data store ---------------------- */
-    function loadData(){
-      try{
-        const raw = localStorage.getItem(LS_KEY);
-        if(!raw) return [];
-        return JSON.parse(raw);
-      }catch(e){console.error(e); return []}
-    }
-    function saveData(items){ localStorage.setItem(LS_KEY, JSON.stringify(items)); }
-
-    /* ---------------------- UI & App Logic ---------------------- */
-    const $ = (id)=> document.getElementById(id);
-    const loginScreen = $('loginScreen');
-    const app = $('app');
-    const loginBtn = $('loginBtn');
-    const logoutBtn = $('logoutBtn');
-    const loginMsg = $('loginMsg');
-
-    const inventoryTable = $('inventoryTable');
-    const totalCount = $('totalCount');
-    const globalSearch = $('globalSearch');
-    const exportCsv = $('exportCsv');
-
-    const itemSku = $('itemSku');
-    const itemName = $('itemName');
-    const itemCategory = $('itemCategory');
-    const itemQty = $('itemQty');
-    const itemPrice = $('itemPrice');
-    const saveItem = $('saveItem');
-    const clearForm = $('clearForm');
-    const formMsg = $('formMsg');
-    const seedDemo = $('seedDemo');
-    const clearAll = $('clearAll');
-
-    let items = loadData();
-    let editingId = null; // null or SKU
-
-    function renderTable(filterText=''){
-      inventoryTable.innerHTML='';
-      const f = (filterText||'').trim().toLowerCase();
-      const filtered = items.filter(it => {
-        if(!f) return true;
-        return (it.sku||'').toLowerCase().includes(f) || (it.name||'').toLowerCase().includes(f) || (it.category||'').toLowerCase().includes(f);
+  if(mode==='add'){
+    // Generate unique ID
+    let maxId = 1000;
+    if(employees.length > 0){
+      employees.forEach(emp => {
+        const num = parseInt(emp.id.split('-')[1]);
+        if(num > maxId) maxId = num;
       });
-
-      totalCount.textContent = filtered.length;
-
-      if(filtered.length===0){
-        inventoryTable.innerHTML = '<tr><td colspan="6" class="muted">No items found � add some using the form on the right.</td></tr>';
-        return;
-      }
-
-      for(const it of filtered){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(it.sku)}</td>
-          <td>${escapeHtml(it.name)}</td>
-          <td>${escapeHtml(it.category)}</td>
-          <td>${Number(it.qty)}</td>
-          <td>? ${formatCurrency(it.price)}</td>
-          <td class="actions">
-            <button data-sku="${escapeHtml(it.sku)}" class="btn-edit">Edit</button>
-            <button data-sku="${escapeHtml(it.sku)}" class="btn-del">Delete</button>
-          </td>
-        `;
-        inventoryTable.appendChild(tr);
-      }
-
-      // attach handlers
-      document.querySelectorAll('.btn-edit').forEach(b=> b.addEventListener('click', (e)=>{
-        const sku = e.currentTarget.dataset.sku; startEdit(sku);
-      }));
-      document.querySelectorAll('.btn-del').forEach(b=> b.addEventListener('click', (e)=>{
-        const sku = e.currentTarget.dataset.sku; deleteItem(sku);
-      }));
     }
+    e.id = `E-${maxId + 1}`;
+    employees.push(e);
+  } else {
+    const idx=employees.findIndex(x=>x.id===id);
+    e.id = id;
+    employees[idx]=e;
+  }
 
-    function escapeHtml(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+  closeModal(); renderEmployeeTable(); showToast('Employee saved');
+}
 
-    function startEdit(sku){
-      const it = items.find(x=>x.sku===sku);
-      if(!it) return;
-      editingId = sku;
-      itemSku.value = it.sku; itemName.value = it.name; itemCategory.value = it.category; itemQty.value = it.qty; itemPrice.value = it.price;
-      formMsg.textContent = 'Editing item � click Save to update.';
-    }
+function deleteEmployee(id){if(confirm('Delete '+id+'?')){employees=employees.filter(e=>e.id!==id); renderEmployeeTable(); showToast('Employee deleted');}}
+function closeModal(){document.getElementById('modal-root').innerHTML='';}
 
-    function clearFormFields(){ editingId=null; itemSku.value=''; itemName.value=''; itemCategory.value=''; itemQty.value=1; itemPrice.value=0.00; formMsg.textContent=''; }
+// ========== Logs ==========
+function renderLogs(){
+  let rows=''; [...logs].reverse().forEach(l=>rows+=`<tr><td>${l.time}</td><td>${l.empId}</td><td>${l.action}</td></tr>`);
+  document.getElementById('main-content').innerHTML=`
+    <div class="card">
+      <h3>Attendance Logs <button class="btn btn-success" onclick="exportLogs()">Export Excel</button></h3>
+      <table><thead><tr><th>Time</th><th>Employee ID</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
 
-    function saveItemHandler(){
-      const sku = (itemSku.value||'').trim();
-      const name = (itemName.value||'').trim();
-      const category = (itemCategory.value||'').trim();
-      const qty = Number(itemQty.value||0);
-      const price = Number(itemPrice.value||0);
+// ========== Excel Export ==========
+function exportEmployees(){
+  const ws=XLSX.utils.json_to_sheet(employees);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Employees');
+  XLSX.writeFile(wb,'Employees.xlsx');
+}
+function exportLogs(){
+  const ws=XLSX.utils.json_to_sheet(logs);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Logs');
+  XLSX.writeFile(wb,'Logs.xlsx');
+}
 
-      if(!sku || !name){ formMsg.textContent='SKU and Name are required.'; return; }
-      if(qty<0 || price<0){ formMsg.textContent='Quantity and price must be non-negative.'; return; }
+// ========== Nav ==========
+document.getElementById('nav-dashboard').onclick=()=>showView('dashboard');
+document.getElementById('nav-employees').onclick=()=>showView('employees');
+document.getElementById('nav-logs').onclick=()=>showView('logs');
+document.getElementById('btn-logout').onclick=()=>{currentUser=null; renderLanding(); showToast('Logged out');};
 
-      const exists = items.find(x=>x.sku===sku);
-      if(editingId){
-        // editing: allow sku change only if new SKU doesn't conflict
-        if(sku !== editingId && exists){ formMsg.textContent='Another item with this SKU already exists.'; return; }
-        const idx = items.findIndex(x=>x.sku===editingId);
-        items[idx] = { sku, name, category, qty, price };
-        editingId = null;
-        formMsg.textContent = 'Item updated.';
-      } else {
-        if(exists){ formMsg.textContent='Item with this SKU already exists.'; return; }
-        items.push({ sku, name, category, qty, price });
-        formMsg.textContent = 'Item added.';
-      }
-      saveData(items); renderTable(globalSearch.value);
-    }
-
-    function deleteItem(sku){
-      if(!confirm('Delete item '+sku+'?')) return;
-      items = items.filter(x=>x.sku!==sku);
-      saveData(items); renderTable(globalSearch.value);
-    }
-
-    function exportToCsv(){
-      if(items.length===0){ alert('No data to export'); return; }
-      const rows = [ ['SKU','Name','Category','Quantity','Price'] ];
-      for(const it of items) rows.push([it.sku,it.name,it.category,String(it.qty),String(it.price)]);
-      const csv = rows.map(r=> r.map(c=> '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download = 'inventory.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    }
-
-    function seedDemoItems(){
-      const demo = [
-        {sku:'SKU-1001', name:'Wireless Mouse', category:'Peripherals', qty:45, price:499.00},
-        {sku:'SKU-1002', name:'Mechanical KB', category:'Peripherals', qty:22, price:2599.50},
-        {sku:'SKU-2001', name:'24" Monitor', category:'Displays', qty:12, price:7999.00},
-        {sku:'SKU-3001', name:'Ethernet Cable 10m', category:'Cables', qty:150, price:199.99},
-      ];
-      items = demo; saveData(items); renderTable();
-    }
-
-    function clearAllData(){ if(!confirm('Clear all inventory data?')) return; items = []; saveData(items); renderTable(); }
-
-    /* ---------------------- Event wiring ---------------------- */
-    loginBtn.addEventListener('click', ()=>{
-      const u = $('username').value.trim(); const p = $('password').value;
-      if(u===demoUser.username && p===demoUser.password){ setAuth(true); showApp(); } else { loginMsg.textContent = 'Invalid credentials.'; }
-    });
-    logoutBtn.addEventListener('click', ()=>{ setAuth(false); showLogin(); });
-
-    saveItem.addEventListener('click', saveItemHandler);
-    clearForm.addEventListener('click', clearFormFields);
-    globalSearch.addEventListener('input', (e)=> renderTable(e.target.value));
-    exportCsv.addEventListener('click', exportToCsv);
-    seedDemo.addEventListener('click', ()=>{ if(confirm('Seed demo items? This will replace current data.')) seedDemoItems(); });
-    clearAll.addEventListener('click', clearAllData);
-
-    // support Enter key on inputs to save
-    [itemSku,itemName,itemCategory,itemQty,itemPrice].forEach(i=> i.addEventListener('keydown', (e)=>{ if(e.key==='Enter') saveItemHandler(); }));
-
-    /* ---------------------- Startup ---------------------- */
-    function showApp(){ loginScreen.classList.add('hidden'); app.classList.remove('hidden'); renderTable(); }
-    function showLogin(){ loginScreen.classList.remove('hidden'); app.classList.add('hidden'); }
-
-    // Auto login if previously authenticated
-    if(isAuthenticated()){ showApp(); } else { showLogin(); }
-
-    // initialize table when app shown
-    renderTable();
-
-    /* ---------------------- Notes ---------------------- */
-    // This is a client-side demo only: authentication and data are stored in localStorage.
-    // For a production-ready system you should implement server-side authentication, password hashing,
-    // secure sessions, and a real database (MySQL/Postgres/NoSQL). Consider building a REST API
-    // and connecting this UI to the backend.
-  </script>
-</body>
-</html>
-
-</head>
-
-<body>
+// ========== Boot ==========
+renderLanding();
+</script>
 </body>
 </html>
